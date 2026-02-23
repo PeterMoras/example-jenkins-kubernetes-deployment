@@ -3,9 +3,9 @@ pipeline {
     stages{
         stage('Setup'){
             agent any
-            environment {
-                KUBECONFIG = credentials('local-kube-config')
-            }
+            // environment {
+            //     KUBECONFIG = credentials('local-kube-config')
+            // }
 
             steps{
                 withCredentials([usernamePassword(credentialsId: 'local-registry-creds', 
