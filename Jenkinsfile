@@ -8,13 +8,13 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'local-registry-creds ', 
                                                             usernameVariable: 'DOCKER_USER', 
                                                             passwordVariable: 'DOCKER_PASS')]) {
-                    sh label: 'Setup registry secret in kubernetes', script:"""
+                    sh label: 'Setup registry secret in kubernetes', script:'''
                         kubectl create secret docker-registry local-registry-secret \
                             --docker-server=host.docker.internal:5000 \
                             --docker-username=${DOCKER_USER} \
                             --docker-password=${DOCKER_PASS} \
                             --
-                    """
+                    '''
                 }
                 //ensureDockerSecretExists('docker-registry', 'local-registry-secret', 'host.docker.internal:5000')
             }
