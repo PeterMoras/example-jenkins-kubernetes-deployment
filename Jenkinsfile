@@ -3,9 +3,7 @@ pipeline {
     stages{
         stage('Setup'){
             agent{ label 'built-in'}
-            environment{
 
-            }
             steps{
                 withCredentials([usernamePassword(credentialsId: 'local-registry-creds ', 
                                                             usernameVariable: 'DOCKER_USER', 
