@@ -8,7 +8,7 @@ pipeline {
             }
 
             steps{
-                withCredentials([usernamePassword(credentialsId: 'local-registry-creds ', 
+                withCredentials([usernamePassword(credentialsId: 'local-registry-creds', 
                                                             usernameVariable: 'DOCKER_USER', 
                                                             passwordVariable: 'DOCKER_PASS')]) {
                     sh label: 'Setup registry secret in kubernetes', script:'''
@@ -47,7 +47,7 @@ pipeline {
                         --context ${env.WORKSPACE}/${BUILD_PATH} \
                         --dockerfile ${env.WORKSPACE}/${BUILD_PATH}/Dockerfile \
                         --destination ${DOCKER_IMAGE}:${TAG} \
-                        --destination ${DOCKER_IMAGE}:latest
+                        --destination ${DOCKER_IMAGE}:latest \
                         --insecure \
                         --skip-tls-verify \
                         --insecure-pull
