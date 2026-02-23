@@ -2,7 +2,7 @@ pipeline {
     agent none
     stages{
         stage('Setup'){
-            agent{ label 'built-in'}
+            agent any
 
             steps{
                 withCredentials([usernamePassword(credentialsId: 'local-registry-creds ', 
