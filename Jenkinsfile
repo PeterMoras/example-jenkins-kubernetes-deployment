@@ -11,12 +11,16 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'local-registry-creds', 
                                                             usernameVariable: 'DOCKER_USER', 
                                                             passwordVariable: 'DOCKER_PASS')]) {
+                    sh label: 'Setup jenkins-rbac' , script:'''
+                        kubectl apply -f jenkins/jenkins-rbac.yml
+                    '''
+                    
                     sh label: 'Setup registry secret in kubernetes', script:'''
                         kubectl create secret docker-registry local-registry-secret \
                             --docker-server=host.docker.internal:5000 \
                             --docker-username=${DOCKER_USER} \
-                            --docker-password=${DOCKER_PASS} \
-                            --
+                            --docker-password=${DOCKER_PASS} --dry-run=client -o yaml | kubectl apply -f -
+
                     '''
                 }
                 //ensureDockerSecretExists('docker-registry', 'local-registry-secret', 'host.docker.internal:5000')

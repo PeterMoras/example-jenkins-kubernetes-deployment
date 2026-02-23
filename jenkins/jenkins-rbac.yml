@@ -1,0 +1,30 @@
+# jenkins-rbac.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: jenkins-agent
+  namespace: default
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: secret-manager-role
+  namespace: default
+rules:
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: jenkins-agent-secret-manager-binding
+  namespace: default
+subjects:
+- kind: ServiceAccount
+  name: jenkins-agent
+  namespace: default
+roleRef:
+  kind: Role
+  name: secret-manager-role
+  apiGroup: rbac.authorization.k8s.io
