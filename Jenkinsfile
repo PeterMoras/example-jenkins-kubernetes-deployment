@@ -2,7 +2,7 @@ pipeline {
     agent none
     stages{
         stage('Setup'){
-            agent any
+            agent {label 'built-in'}
             // environment {
             //     KUBECONFIG = credentials('local-kube-config')
             // }
