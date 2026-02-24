@@ -24,8 +24,8 @@ rules:
   verbs: ["create"]
 - apiGroups: [""]
   resources: ["secrets"]
-  # Restrict all other actions to ONLY the 'local-registry-secret'.
-  resourceNames: ["local-registry-secret"]
+  # Restrict all other actions to ONLY the 'docker-registry-creds'.
+  resourceNames: ["docker-registry-creds"]
   # The 'get' is needed by Kaniko to mount the secret, and 'get'/'patch' are needed by 'kubectl apply'.
   verbs: ["get", "patch", "update"]
 ---

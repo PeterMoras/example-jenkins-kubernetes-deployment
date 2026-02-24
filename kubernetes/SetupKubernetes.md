@@ -16,7 +16,7 @@ This command will create the jenkins-agent namespace and setup the jenkins-agent
 After creating the jenkins-agent namespace, 
 1. Go to Jenkins > Manange Jenkins > Plugins, and make sure the Kubernetes plugin is installed
 2. Go to Jenkins > Manage Jenkins > Clouds, and create a new kubernetes cloud as described here: https://plugins.jenkins.io/kubernetes/
-make sure the kubernetes namespace is set to jenkins-agents
+make sure the kubernetes namespace is set to jenkins-agent
 you can confirm it works with the test credentials button
 
 ## Setup docker registry
