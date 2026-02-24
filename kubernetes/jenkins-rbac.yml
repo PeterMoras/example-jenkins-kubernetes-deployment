@@ -1,0 +1,44 @@
+
+# jenkins-rbac.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: jenkins-agent
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: jenkins-agent
+  namespace: jenkins-agent
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: secret-manager-role
+  namespace: jenkins-agent
+rules:
+- apiGroups: [""]
+  resources: ["secrets"]
+  # The 'create' verb cannot be restricted by resourceName, so it's in its own rule.
+  # This allows the pipeline to create the secret if it doesn't exist.
+  verbs: ["create"]
+- apiGroups: [""]
+  resources: ["secrets"]
+  # Restrict all other actions to ONLY the 'local-registry-secret'.
+  resourceNames: ["local-registry-secret"]
+  # The 'get' is needed by Kaniko to mount the secret, and 'get'/'patch' are needed by 'kubectl apply'.
+  verbs: ["get", "patch", "update"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: jenkins-agent-secret-manager-binding
+  namespace: jenkins-agent
+subjects:
+- kind: ServiceAccount
+  name: jenkins-agent
+  namespace: jenkins-agent
+roleRef:
+  kind: Role
+  name: secret-manager-role
+  apiGroup: rbac.authorization.k8s.io

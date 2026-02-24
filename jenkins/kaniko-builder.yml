@@ -19,7 +19,7 @@ spec:
     projected:
       sources:
         - secret:
-            name: local-registry-secret
+            name: docker-registry-creds
             items:
               - key: .dockerconfigjson
                 path: config.json
