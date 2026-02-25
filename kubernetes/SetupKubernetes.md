@@ -8,7 +8,7 @@ Window users should consider using wsl for this.
 Create a kubernetes cluster using any number of the available tools, such as docker desktop
 
 ## Create Jenkins-agent Namespace
-start by running the command: `kubectl apply -f jenkins-rbac.yaml`
+start by running the command: `kubectl apply -f jenkins-rbac.yml`
 This command will create the jenkins-agent namespace and setup the jenkins-agent role, which jenkins can use when provisioning agents in kubernetes
 
 
