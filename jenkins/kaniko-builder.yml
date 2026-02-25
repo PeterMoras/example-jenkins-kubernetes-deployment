@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 spec:
-  serviceAccountName: jenkins-role
+  serviceAccountName: jenkins-agent
   containers:
   - name: kaniko
     image: gcr.io/kaniko-project/executor:debug
