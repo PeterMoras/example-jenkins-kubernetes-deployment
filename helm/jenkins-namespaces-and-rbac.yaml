@@ -1,0 +1,45 @@
+# Example namespaces and RBAC for Jenkins controller and agent isolation.
+# Replace namespace names if you plan different ones.
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: jenkins-controller
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: jenkins-agents
+---
+# Role that grants limited permissions to allow Jenkins controller to create/manage agent pods
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: jenkins-agent-creator
+  namespace: jenkins-agents
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "pods/exec", "pods/log", "services", "endpoints", "serviceaccounts", "secrets", "persistentvolumeclaims"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: ["apps"]
+    resources: ["deployments", "statefulsets"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    verbs: ["get", "list", "watch", "create", "update", "patch"]
+---
+# Bind the Role to the Jenkins controller ServiceAccount in the controller namespace
+# This allows the controller (in jenkins-controller) to create agent pods in jenkins-agents.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: jenkins-controller-to-agents
+  namespace: jenkins-agents
+subjects:
+  - kind: ServiceAccount
+    name: jenkins
+    namespace: jenkins-controller
+roleRef:
+  kind: Role
+  name: jenkins-agent-creator
+  apiGroup: rbac.authorization.k8s.io

@@ -1,0 +1,30 @@
+# 1. The ServiceAccount remains in the 'jenkins' namespace
+# (No changes needed to your existing SA)
+
+---
+# 2. Define the permissions INSIDE the target namespace
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: jenkins-agent-manager
+  namespace: jenkins-agent  # Change this to your target namespace
+rules:
+- apiGroups: [""]
+  resources: ["pods", "pods/exec", "pods/log", "persistentvolumeclaims"]
+  verbs: ["get", "list", "watch", "create", "delete", "update", "patch"]
+
+---
+# 3. Bind that Role to the ServiceAccount living in the 'jenkins' namespace
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: jenkins-cross-namespace-binding
+  namespace: jenkins-agent  # This MUST be in the target namespace
+subjects:
+- kind: ServiceAccount
+  name: jenkins-admin
+  namespace: jenkins          # This tells K8s where the SA actually lives
+roleRef:
+  kind: Role
+  name: jenkins-agent-manager
+  apiGroup: rbac.authorization.k8s.io

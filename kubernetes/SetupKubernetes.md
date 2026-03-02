@@ -1,7 +1,9 @@
 # Set up Kubernetes
-This file describes how to take a basic kubernetes cluster and set it up with proper permissions for jenkins use.
-This assumes you are running all commands on linux/Unix.
-Window users should consider using wsl for this.
+This file describes how to setup jenkins in kubernetes and apply proper permissions handling for isolated agents
+
+In short, just run `kubectl apply -f X` for all the yml files in order.
+It will result in a persistant jenkins instance on kubernetes that connects via port 8080.
+It also allows for the quick setup of the Kubernetes plugin, which will be described below.
 
 
 ## Create the kubernetes cluster
@@ -50,7 +52,7 @@ USERNAME=testuser
 PASSWORD=testpassword
 
 kubectl create secret docker-registry docker-registry-creds \
-    --docker-server=host.docker.internal:5000 \
+    --docker-server=http://my-registry:5000 \
     --docker-username=$USERNAME \
     --docker-password=$PASSWORD \
     --namespace jenkins-agent

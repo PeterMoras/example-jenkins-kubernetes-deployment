@@ -1,0 +1,29 @@
+# registry-service
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-registry
+  namespace: jenkins-agent # Match the Namespace of your Jenkins Agent
+spec:
+  ports:
+    - protocol: TCP
+      port: 5000       # Port used inside the cluster
+      targetPort: 5000 # Port on your host machine
+---
+# registry-endpoints
+apiVersion: discovery.k8s.io/v1
+kind: EndpointSlice
+metadata:
+  name: my-registry-slice # Name doesn't have to match exactly, but it's cleaner
+  namespace: jenkins-agent # Match the Namespace of your Jenkins Agent
+  labels:
+    kubernetes.io/service-name: my-registry # THIS connects it to your Service
+addressType: IPv4
+ports:
+  - port: 5000
+    protocol: TCP
+endpoints:
+  - addresses:
+      - "172.17.0.1" # Use your Host/Bridge IP here
+    conditions:
+      ready: true
