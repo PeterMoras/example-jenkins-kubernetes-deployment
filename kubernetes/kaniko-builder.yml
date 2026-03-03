@@ -18,7 +18,7 @@ spec:
     projected:
       sources:
         - secret:
-            name: docker-registry-creds
+            name: nexus-credentials
             items:
               - key: .dockerconfigjson
                 path: config.json
