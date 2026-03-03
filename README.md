@@ -18,3 +18,4 @@ Then run the actual jenkins helm file, targeting the jenkins-controller namespac
 kubectl apply -f helm/jenkins-namespaces-and-rbac.yaml
 helm upgrade --install jenkins jenkins/jenkins -n jenkins-controller -f helm/jenkins-values.yaml
 ```
+
