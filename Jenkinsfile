@@ -11,7 +11,7 @@ pipeline {
 
         stage('Build & Push Image'){
             environment {
-                LOCAL_REGISTRY = "nexus.local/repository/docker-private/"
+                LOCAL_REGISTRY = "registry.local"
                 DOCKER_IMAGE = "${LOCAL_REGISTRY}/${IMAGE_NAME}"
                 TAG = "${env.BUILD_NUMBER}"
                 BUILD_PATH = "infrastructure/${IMAGE_NAME}"
