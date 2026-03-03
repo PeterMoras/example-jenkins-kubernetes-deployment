@@ -1,0 +1,22 @@
+# add route that allows requests to nexus.local to be forwarded to the Nexus Docker registry service if on port 8082.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nexus-docker-registry
+  namespace: nexus
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+    ingress.kubernetes.io/proxy-body-size: "0" # Crucial for large image pushes
+spec:
+  ingressClassName: traefik
+  rules:
+  - host: nexus.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: nexus-nexus3 # Change this to your actual Nexus service name
+            port:
+              number: 8082

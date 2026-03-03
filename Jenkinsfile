@@ -1,36 +1,20 @@
 pipeline {
     agent none
+
+    environment{
+        REGISTRY_URL = 'nexus.local'
+        IMAGE_NAME = 'my-test-container'
+    }
+
     stages{
-        // stage('Setup'){
-        //     agent {label 'built-in'}
-        //     // environment {
-        //     //     KUBECONFIG = credentials('local-kube-config')
-        //     // }
 
-        //     steps{
-        //         withCredentials([usernamePassword(credentialsId: 'local-registry-creds', 
-        //                                                     usernameVariable: 'DOCKER_USER', 
-        //                                                     passwordVariable: 'DOCKER_PASS')]) {
-
-
-        //             sh label: 'Setup registry secret in kubernetes', script:'''
-        //                 kubectl create secret docker-registry local-registry-secret \
-        //                     --docker-server=host.docker.internal:5000 \
-        //                     --docker-username=${DOCKER_USER} \
-        //                     --docker-password=${DOCKER_PASS} --dry-run=client -o yaml | kubectl apply -f -
-
-        //             '''
-        //         }
-        //         //ensureDockerSecretExists('docker-registry', 'local-registry-secret', 'host.docker.internal:5000')
-        //     }
-        // }
 
         stage('Build & Push Image'){
             environment {
-                LOCAL_REGISTRY = "host.docker.internal:5000"
-                DOCKER_IMAGE = "${LOCAL_REGISTRY}/my-test-container"
+                LOCAL_REGISTRY = "nexus.local"
+                DOCKER_IMAGE = "${LOCAL_REGISTRY}/${IMAGE_NAME}"
                 TAG = "${env.BUILD_NUMBER}"
-                BUILD_PATH = "infrastructure/my-test-container"
+                BUILD_PATH = "infrastructure/${IMAGE_NAME}"
                 
             }
 
