@@ -4,19 +4,16 @@ pipeline {
     environment{
         // REGISTRY_URL = 'nexus.local'
         IMAGE_NAME = 'my-test-container'
+        LOCAL_REGISTRY = "nexus-nexus3.nexus:8082"
+        DOCKER_IMAGE = "${LOCAL_REGISTRY}/${IMAGE_NAME}"
+        TAG = "${env.BUILD_NUMBER}"
+        BUILD_PATH = "infrastructure/${IMAGE_NAME}"
     }
 
     stages{
 
 
         stage('Build & Push Image'){
-            environment {
-                LOCAL_REGISTRY = "nexus-nexus3.nexus:8082"
-                DOCKER_IMAGE = "${LOCAL_REGISTRY}/${IMAGE_NAME}"
-                TAG = "${env.BUILD_NUMBER}"
-                BUILD_PATH = "infrastructure/${IMAGE_NAME}"
-                
-            }
 
             agent {
                 kubernetes {
