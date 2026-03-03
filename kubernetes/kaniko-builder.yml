@@ -13,12 +13,13 @@ spec:
       limits:
         cpu: "1000m"
         memory: "2Gi"
+    volumeMounts:
+      - name: docker-config
+        mountPath: /kaniko/.docker/
   volumes:
   - name: docker-config
-    projected:
-      sources:
-        - secret:
-            name: nexus-auth
-            items:
-              - key: .dockerconfigjson
-                path: config.json
+    secret:
+      secretName: nexus-auth
+      items:
+        - key: .dockerconfigjson
+          path: config.json
