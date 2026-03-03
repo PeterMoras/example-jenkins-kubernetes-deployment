@@ -1,0 +1,48 @@
+expose:
+  type: ingress
+  tls:
+    enabled: false # Set to false if Traefik handles SSL termination, or true if using cert-manager
+  ingress:
+    hosts:
+      core: harbor.local  # Change to your local DNS or IP-based hostname
+    controller: default   # Tells Harbor to create a standard Ingress object
+    className: "traefik"  # MUST match your Traefik IngressClass name
+    annotations:
+      # Traefik specific annotations
+      traefik.ingress.kubernetes.io/router.entrypoints: web
+      # Allow large image uploads (default is often too small for docker push)
+      ingress.kubernetes.io/proxy-body-size: "0" 
+      traefik.ingress.kubernetes.io/router.tls: "false"
+
+externalURL: http://harbor.local  # Must match the host above
+
+persistence:
+  enabled: true
+  # Set type to filesystem to use local disks/PVCs instead of S3
+  imageChartStorage:
+    type: filesystem
+  
+  # Configuration for the individual components
+  persistentVolumeClaim:
+    registry:
+      # If you have a specific storage class (e.g., 'local-path'), put it here.
+      # Leave empty "" to use the cluster's default storage class.
+      storageClass: ""
+      accessMode: ReadWriteOnce
+      size: 50Gi
+    jobservice:
+      storageClass: ""
+      accessMode: ReadWriteOnce
+      size: 10Gi
+    database:
+      storageClass: ""
+      accessMode: ReadWriteOnce
+      size: 20Gi
+    redis:
+      storageClass: ""
+      accessMode: ReadWriteOnce
+      size: 5Gi
+    trivy:
+      storageClass: ""
+      accessMode: ReadWriteOnce
+      size: 20Gi
