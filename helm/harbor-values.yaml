@@ -46,3 +46,26 @@ persistence:
       storageClass: ""
       accessMode: ReadWriteOnce
       size: 20Gi
+  
+
+# Example overrides for ARM64 (Check Artifact Hub for the latest Bitnami tags)
+portal:
+  image:
+    repository: bitnami/harbor-portal
+    tag: 2.14.2
+core:
+  image:
+    repository: bitnami/harbor-core
+    tag: 2.14.2
+jobservice:
+  image:
+    repository: bitnami/harbor-jobservice
+    tag: 2.14.2
+registry:
+  image:
+    repository: bitnami/harbor-registry
+    tag: 2.14.2
+database:
+  image:
+    repository: bitnami/postgresql
+    tag: 15.12.0 # Ensure this is an ARM64-compatible version

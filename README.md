@@ -33,4 +33,18 @@ The rbac file creates the proper namespace for jenkins and creates a service rol
 helm upgrade --install jenkins jenkins/jenkins -n jenkins-controller -f helm/jenkins-values.yaml
 ```
 
+## Installing Harbor
+Harbor exists mainly in this project to be a docker artifact source for jenkins, though it supports all artifact types.
+Installing harbor only requires 2 steps.
+1. Update helm to get access to harbor official helm charts:
+```
+helm repo add harbor https://charts.harbor.io
+help repo update
+```
+2. Install harbor via the helm chart:
+```
+helm upgrade --install harbor harbor/harbor -n harbor -f helm/harbor-values.yaml --create-namespace
+```
 
+## Accessing Harbor and Jenkins
+Access to Harbor and Jenkins will not work, as they are exposed via the ingress controller traefik using names like "jenkins.local". To fix this, open and edit your computer's hosts file to include your server's IP and the host name on a new line. For example: `192.168.0.20 jenkins.local`
