@@ -39,6 +39,26 @@ pipeline {
                 }
             }
         }
+        stage("Deploy to Kubernetes"){
+            agent {
+                kubernetes {
+                    yamlfile 'kubernetes/kubectl-deployer.yml'
+
+                }
+            }
+            environment {
+                KUBECONFIG = '/home/jenkins/.kube/config'
+            }
+            steps {
+                container('build-tools') {
+                    sh "kubectl get pods"
+                    sh "helm list"
+                    // sh """
+                    // kubectl set image deployment/${IMAGE_NAME} ${IMAGE_NAME}=${DOCKER_IMAGE}:${TAG} -n default
+                    // """
+                }
+            }
+        }
     }
 
     

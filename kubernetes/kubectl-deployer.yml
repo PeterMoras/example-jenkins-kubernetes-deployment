@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: jenkins-agent-k8s
+  labels:
+    app: jenkins-agent
+spec:
+  containers:
+  - name: jnlp
+    # This is the standard Jenkins agent communication container
+    image: jenkins/inbound-agent:latest
+    args: ['$(JENKINS_SECRET)', '$(JENKINS_NAME)']
+  - name: build-tools
+    # Using a lightweight image that includes both kubectl and helm
+    image: dtzar/helm-kubectl:latest
+    command:
+    - cat
+    tty: true
+    volumeMounts:
+    - name: kube-config
+      mountPath: /root/.kube
+      readOnly: true
+  volumes:
+  - name: kube-config
+    configMap:
+      # Assumes you have created a ConfigMap containing your local .kube/config
+      name: kube-config-map
