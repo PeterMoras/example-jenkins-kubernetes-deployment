@@ -42,7 +42,7 @@ pipeline {
         stage("Deploy to Kubernetes"){
             agent {
                 kubernetes {
-                    yamlfile 'kubernetes/kubectl-deployer.yml'
+                    yamlFile 'kubernetes/kubectl-deployer.yml'
 
                 }
             }
